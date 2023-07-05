@@ -42,16 +42,26 @@ makeChange(genre, bg)
 const sortArray = (arr) => {
     arr.sort();
 }
-sortArray(movieDB.movies);
+
 
 function showMovies(films, parent){
     parent.innerHTML = '';
-    
+    sortArray(films);
+
     films.forEach((film, i) => {
         parent.innerHTML += `  
         <li class="promo__interactive-item">${i + 1} ${film}
             <div class="delete"></div>
         </li>`;
+    })
+
+    document.querySelectorAll('.delete').forEach((btn, i) => {
+        btn.addEventListener('click', () => {
+            btn.parentElement.remove();
+            movieDB.movies.splice(i, 1);
+
+            showMovies(films, parent);
+        })
     })
 } 
 showMovies(movieDB.movies, movieList)
@@ -68,6 +78,9 @@ function addMovie(){
         if(newMovie){
             if(newMovie.length > 21){
                 newMovie = `${newMovie.substring(0,22)}...`
+            }
+            if(favorite){
+                alert('Добавили любимый фильм')
             }
             movieDB.movies.push(newMovie);
             sortArray(movieDB.movies);
